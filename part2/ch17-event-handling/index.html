@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обработка событий</title>
+</head>
+<body>
+    <button onclick="alert('Спасибо');">Щелкните здесь</button>
+    <button id="mybutton">Щелкни на мне</button>
+    <img src="js.png" style="position:absolute; left:100px; top:100px;" onmousedown="if (event.shiftKey) drag(this, event);">
+    <!-- Буксируемый элемент -->
+    <div style="position:absolute; left:100px; top:100px; width:250px; background-color: white; border: solid black;">
+        <!-- "Заголовок" окна. Обратите внимание на атрибут onmousedown. -->
+        <div style="background-color: gray; border-bottom: dotted black; padding: 3px; font-family: sans-serif; font-weight: bold;" onmousedown="drag(this.parentNode, event);"> Перетащи меня <!-- Содержимое заголовка --> </div>
+        <!-- Содержимое буксируемого элемента -->
+        <p>Это тест. Проверка, проверка, проверка.</p><p>Тест</p><p>Тест</p>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>

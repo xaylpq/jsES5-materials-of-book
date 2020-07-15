@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Analog Clock</title>
+    <script>
+        function updateTime() { // Обновляет SVG-изображение часов
+            // в соответствии с текущим временем
+            var now = new Date(); // Текущее время
+            var min = now.getMinutes(); // Минуты
+            var hour = (now.getHours() % 12) + min/60; // Часы с дробной частью
+            var minangle = min*6; // 6 градусов на минуту
+            var hourangle = hour*30; // 30 градусов на час
+            // Получить SVG-элементы стрелок часов
+            var minhand = document.getElementById("minutehand");
+            var hourhand = document.getElementById("hourhand");
+            // Установить в них SVG-атрибут для перемещения по циферблату
+            minhand.setAttribute("transform", "rotate(" + minangle + ",50,50)");
+            hourhand.setAttribute("transform", "rotate(" + hourangle + ",50,50)");
+            // Обновлять показания часов 1 раз в минуту
+            setTimeout(updateTime, 60000);
+        }
+    </script>
+    <style>
+    /* Все следующие CSS-стили применяются к SVG-элементам, объявленным ниже */
+    #clock { /* общие стили для всех элементов часов */
+        stroke: black; /* черные линии */
+        stroke-linecap: round; /* с закругленными концами */
+        fill: #eef; /* на светлом, голубовато-сером фоне */
+    }
+    #face { stroke-width: 3px;} /* рамка циферблата часов */
+    #ticks { stroke-width: 2; } /* метки часов на циферблате */
+    #hourhand {stroke-width: 5px;} /* широкая часовая стрелка */
+    #minutehand {stroke-width: 3px;} /* узкая минутная стрелка */
+    #numbers { /* стиль отображения цифр на циферблате */
+        font-family: sans-serif; font-size: 7pt; font-weight: bold;
+        text-anchor: middle; stroke: none; fill: black;
+    }
+    </style>
+</head>
+<body onload="updateTime()">
+    <!-- viewBox - система координат, width и height - экранные размеры -->
+    <svg id="clock" viewBox="0 0 100 100" width="500" height="500">
+        <defs> <!-- Определить фильтр для рисования теней -->
+            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />
+                <feOffset in="blur" dx="1" dy="1" result="shadow" />
+                <feMerge>
+                    <feMergeNode in="SourceGraphic"/><feMergeNode in="shadow"/>
+                </feMerge>
+            </filter>
+        </defs>
+        <circle id="face" cx="50" cy="50" r="45"/> <!-- циферблат -->
+        <g id="ticks"> <!-- 12 часовых меток -->
+            <line x1='50' y1='5.000' x2='50.00' y2='10.00'/>
+            <line x1='72.50' y1='11.03' x2='70.00' y2='15.36'/>
+            <line x1='88.97' y1='27.50' x2='84.64' y2='30.00'/>
+            <line x1='95.00' y1='50.00' x2='90.00' y2='50.00'/>
+            <line x1='88.97' y1='72.50' x2='84.64' y2='70.00'/>
+            <line x1='72.50' y1='88.97' x2='70.00' y2='84.64'/>
+            <line x1='50.00' y1='95.00' x2='50.00' y2='90.00'/>
+            <line x1='27.50' y1='88.97' x2='30.00' y2='84.64'/>
+            <line x1='11.03' y1='72.50' x2='15.36' y2='70.00'/>
+            <line x1='5.000' y1='50.00' x2='10.00' y2='50.00'/>
+            <line x1='11.03' y1='27.50' x2='15.36' y2='30.00'/>
+            <line x1='27.50' y1='11.03' x2='30.00' y2='15.36'/>
+        </g>
+        <g id="numbers"> <!-- Числа в основных направлениях -->
+            <text x="50" y="18">12</text><text x="85" y="53">3</text>
+            <text x="50" y="88">6</text><text x="15" y="53">9</text>
+        </g>
+        <!-- Нарисовать стрелки, указывающие вверх. Они вращаются сценарием. -->
+        <g id="hands" filter="url(#shadow)"> <!-- Добавить тени к стрелкам -->
+            <line id="hourhand" x1="50" y1="50" x2="50" y2="24"/>
+            <line id="minutehand" x1="50" y1="50" x2="50" y2="20"/>
+        </g>
+    </svg>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        // На момент написания этих строк создатели Firefox и Webkit еще не пришли
+        // к соглашению об именовании функции createObjectURL()
+        var getBlobURL = (window.URL && URL.createObjectURL.bind(URL)) ||
+        (window.webkitURL && webkitURL.createObjectURL.bind(webkitURL)) ||
+        window.createObjectURL;
+        var revokeBlobURL = (window.URL && URL.revokeObjectURL.bind(URL)) ||
+        (window.webkitURL && webkitURL.revokeObjectURL.bind(webkitURL)) ||
+        window.revokeObjectURL;
+        // После загрузки документа добавить обработчики событий к элементу droptarget,
+        // чтобы он мог обрабатывать сбрасываемые файлы
+        window.onload = function() {
+            // Отыскать элемент, к которому следует добавить обработчики событий.
+            var droptarget = document.getElementById("droptarget");
+            // Выделяет элемент droptarget изменением рамки, когда пользователь
+            // буксирует файлы над ним.
+            droptarget.ondragenter = function(e) {
+                // Игнорировать, если буксируется что-то иное, не являющееся файлом.
+                // Когда будет реализована поддержка атрибута dropzone, определяемого
+                // спецификацией HTML5, это позволит упростить обработчик.
+                var types = e.dataTransfer.types;
+                if (!types || (types.contains && types.contains("Files")) ||
+                    (types.indexOf && types.indexOf("Files") != -1)) {
+                    droptarget.classList.add("active"); // Выделить элемент droptarget
+                    return false; // Нас интересует
+                } // буксируемый объект
+            };
+            // Снимает выделение площадки сброса, как только пользователь
+            // отбуксирует файл за ее пределы
+            droptarget.ondragleave = function() {
+                droptarget.classList.remove("active");
+            };
+            // Этот обработчик просто сообщает броузеру продолжать посылать события
+            droptarget.ondragover = function(e) { return false; };
+            // Когда пользователь сбросит файлы, необходимо получить их URL-адреса
+            // и отобразить миниатюры.
+            droptarget.ondrop = function(e) {
+                var files = e.dataTransfer.files; // Сброшенные файлы
+                for(var i = 0; i < files.length; i++) { // Обойти все файлы в цикле
+                    var type = files[i].type;
+                    if (type.substring(0,6) !== "image/") // Пропустить не являющиеся
+                        continue; // изображениями
+                    var img = document.createElement("img"); // Создатьэлемент  <img>
+                    img.src = getBlobURL(files[i]); // URL blob:// в <img>
+                    img.onload = function() { // После загрузкиизобр. 
+                        this.width = 100; // установить его размеры
+                        document.body.appendChild(this); // и вставить в документ.
+                        revokeBlobURL(this.src); // Предотвратить утечки памяти!
+                    }
+                }
+                droptarget.classList.remove("active"); // Снять выделение
+                return false; // Событиесброса  обработано
+            }
+        };
+    </script>
+    <style> /* Простые стили для оформления площадки сброса */
+    #droptarget { border: solid black 2px; width: 200px; height: 200px; }
+    #droptarget.active { border: solid red 4px; }
+    </style>
+</head>
+<body> <!-- Изначально в документе имеется только площадка сброса -->
+    <div id="droptarget">Сбросьте сюда файлы изображений</div>
+</body>
+</html>

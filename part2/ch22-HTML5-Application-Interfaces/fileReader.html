@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чтение пользовательского файла</title>
+</head>
+<body>
+    <script>
+    // Читает указанный текстовый файл и отображает его в элементе <pre> ниже
+    function readfile(f) {
+        var reader = new FileReader(); // Создать объект FileReader
+        reader.readAsText(f); // Прочитать файл
+        reader.onload = function() { // Определить обработчик события
+            var text = reader.result; // Это содержимое файла
+            var out = document.getElementById("output"); // Найти элемент output
+            out.innerHTML = ""; // Очистить его
+            out.appendChild(document.createTextNode(text));// Вывести содержимое
+        } // файла
+        reader.onerror = function(e) { // Если что-то пошло не так
+            console.log("Error", e); // Вывести сообщение об ошибке
+        };
+    }
+    </script>
+    Выберите текстовый файл для отображения:
+    <input type="file" onchange="readfile(this.files[0])"></input>
+    <pre id="output"></pre>
+
+    <script>
+    // Исследует первые 4 байта в указанном двоичном объекте. Если это "сигнатура",
+    // определяющая тип файла, асинхронно устанавливает свойство двоичного объекта.
+    function typefile(file) {
+        var slice = file.slice(0,4); // Читать только первые 4 байта
+        var reader = new FileReader(); // Создать асинхронный FileReader
+        reader.readAsArrayBuffer(slice); // Прочитать фрагмент файла
+        reader.onload = function(e) {
+            var buffer = reader.result; // Результат - ArrayBuffer
+            var view = new DataView(buffer); // Получить доступ к результату
+            var magic = view.getUint32(0, false); // 4 байта, прямой порядок
+            switch(magic) { // Определить по ним тип файла
+                case 0x89504E47: file.verified_type = "image/png"; break;
+                case 0x47494638: file.verified_type = "image/gif"; break;
+                case 0x25504446: file.verified_type = "application/pdf"; break;
+                case 0x504b0304: file.verified_type = "application/zip"; break;
+            }
+            console.log(file.name, file.verified_type);
+        };
+    }
+    </script>
+    <input type="file" onchange="typefile(this.files[0])"></input>
+</body>
+</html>

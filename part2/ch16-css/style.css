@@ -1,0 +1,30 @@
+/* Указывает, что заголовки отображаются курсивом синего цвета. */
+h1, h2 { color: blue; font-style: italic }
+/*
+    * Любой элемент с атрибутом class="WARNING" отображается крупными жирными 
+    * символами, имеет большие поля и желтый фон с жирной красной рамкой.
+*/
+.WARNING {
+    font-weight: bold;
+    font-size: 150%;
+    margin: 0 1in 0 1in; /* сверху справа, снизу слева */
+    background-color: yellow;
+    border: solid red 8px;
+    padding: 10px; /* 10 пикселов со всех 4 сторон */
+}
+/*
+    * Текст заголовков h1 и h2 внутри элементов с атрибутом class="WARNING"
+    * должен быть выровнен по центру, в дополнение к выделению синим курсивом.
+*/
+.WARNING h1, .WARNING h2 { text-align: center }
+/*
+    * Отдельный элемент с атрибутом id="special" отображается
+    * прописными буквами по центру.
+*/
+#special {
+    text-align: center;
+    text-transform: uppercase;
+}
+
+
+.fadeable { transition: opacity .5s ease-in }

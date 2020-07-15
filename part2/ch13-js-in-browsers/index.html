@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript в веб-броузерах</title>
+    <style>
+        /* Стили CSS для этой страницы */
+        .reveal * { display: none; } /* Элементы с атрибутом class="reveal" невидимы */
+        .reveal *.handle { display: block;} /* Кроме элементов с class="handle" */
+    </style>
+</head>
+<body>
+    <div id="timestamp"></div>
+
+    <div class="reveal">
+        <h1 class="handle">Щелкните здесь, чтобы увидеть скрытый текст</h1>
+        <p>Этот абзац невидим. Он появляется после щелчка на заголовке.</p>
+    </div>
+    <input type="checkbox" name="options" value="giftwrap" onchange="order.options.giftwrap = this.checked;">
+
+    <script src="main.js"></script>
+    <script>
+        // Ничего не делать, пока документ не будет загружен полностью
+        window.onload = function() {
+        // Отыскать все контейнерные элементы с классом "reveal"
+            var elements = document.getElementsByClassName("reveal");
+            for(var i = 0; i < elements.length; i++) { // Для каждого такого элемента...
+                var elt = elements[i];
+                // Отыскать элементы с классом "handle" в контейнере
+                var title = elt.getElementsByClassName("handle")[0];
+                // После щелчка на этом элементе сделать видимым остальное содержимое
+                addRevealHandler(title, elt);
+            }
+            function addRevealHandler(title, elt) {
+                title.onclick = function() {
+                    if (elt.className == "reveal") elt.className = "revealed";
+                    else if (elt.className == "revealed") elt.className = "reveal";
+                }
+            }
+        };
+    </script>
+</body>
+</html>

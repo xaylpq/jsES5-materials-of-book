@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Каскадные таблицы стилей</title>
+</head>
+<body>
+    <h1>Демонстрация использования каскадных таблиц стилей</h1>
+    <div class="WARNING">
+        <h2>Предупреждение</h2>
+        Это предупреждение! Обратите внимание, как оно привлекает внимание жирным шрифтом и яркими цветами.
+        Также обратите внимание, что заголовок выровнен по центру и выделяется синим курсивом.
+    </div>
+    <p id="special"> Этот абзац выровнен по центру<br> и выводится прописными буквами.<br>
+        <span style="text-transform: none"> Здесь мы явно используем встроенный стиль для переопределения прописных букв. </span>
+    </p>
+    <div style="position: absolute; top: 10px; left: 10px; width: 10px; height: 10px; background-color: blue"></div>
+    <button onclick="shake(this, fadeOut);">Встряхнуть и растворить</button>
+    <script src="main.js"></script>
+</body>
+</html>

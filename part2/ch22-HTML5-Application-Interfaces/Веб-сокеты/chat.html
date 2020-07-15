@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    window.onload = function() {
+        // Позаботиться о некоторых деталях пользовательского интерфейса
+        var nick = prompt("Введите свой псевдоним");
+        // Получить псевдоним
+        var input = document.getElementById("input"); // Отыскать поле ввода
+        input.focus(); // Установить фокус ввода
+        // Открыть веб-сокет для отправки и приема сообщений в чате.
+        // Предполагается, что HTTP-сервер, откуда загружается сценарий, также
+        // поддерживает веб-сокеты, и для связи с ним используется то же имя хоста
+        // и номер порта, но вместо протокола http:// используется протокол ws://
+        var socket = new WebSocket("ws://" + location.host + "/");
+        // Так через веб-сокет принимаются сообщения с сервера
+        socket.onmessage = function(event) { // Вызывается при получении сообщения
+            var msg = event.data; // Получить текст из объекта события
+            var node = document.createTextNode(msg); // Создать текстовый узел
+            var div = document.createElement("div"); // Создать элемент <div>
+            div.appendChild(node); // Добавить текстовый узел
+            document.body.insertBefore(div, input); // и вставить div перед полем ввода
+            input.scrollIntoView(); // Гарантировать видимость элемента input
+        }
+        // Так через веб-сокет отправляются сообщения на сервер 
+        input.onchange = function() { // Когда пользователь нажмет клавишу Enter
+            var msg = nick + ": " + input.value; // Имя пользователя и текст
+            socket.send(msg); // Отправить через сокет
+            input.value = ""; // Подготовиться к вводу следующего сообщения
+        }
+    };
+    </script>
+    <!-- Пользовательский интерфейс – это единственное поле ввода --> 
+    <!-- Новые сообщения в чате будут появляться перед этим элементом -->
+    <input id="input" style="width:100%"/>
+</body>
+</html>

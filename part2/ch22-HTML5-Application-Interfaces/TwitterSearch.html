@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- Это модуль поиска на сайте Twitter. Модуль можно подключить к любой странице внутри элемента <iframe> и запросить его выполнить поиск, отправив ему строку запроса с помощью метода postMessage(). Поскольку модуль подключается в элементе <iframe>, а не <script>, он не сможет получить доступ к  содержимому вмещающего документа. -->
+<html>
+<head>
+    <style>body { font: 9pt sans-serif; }</style>
+    <!-- Подключить библиотеку jQuery ради ее утилиты jQuery.getJSON() -->
+    <script src="http://code.jquery.com/jquery-1.4.4.min.js"/></script>
+    <script>
+    // Можно было бы просто использовать свойство window.onmessage,
+    // но некоторые старые броузеры (такие как Firefox 3) не поддерживают его,
+    // поэтому обработчик устанавливается таким способом.
+    if (window.addEventListener) window.addEventListener("message", handleMessage, false);
+    else window.attachEvent("onmessage", handleMessage); // Для IE8
+    function handleMessage(e) {
+        // Нас не волнует происхождение документа, отправившего сообщение:
+        // мы готовы выполнить поиск на сайте Twitter для любой страницы.
+        // Однако сообщение должно поступить от окна, вмещающего этот модуль.
+        if (e.source !== window.parent) return;
+        var searchterm = e.data; // Это фраза,которую требуется отыскать
+        // С помощью утилит поддержки Ajax из библиотеки jQuery и прикладного
+        // интерфейса Twitter отыскать сообщения, соответствующие фразе.
+        jQuery.getJSON("http://search.twitter.com/search.json?callback=?",
+        { q: searchterm },
+        function(data) { // Вызывается с результатами запроса
+            var tweets = data.results;
+            // Создать HTML-документ для отображения результатов
+            var escaped = searchterm.replace("<", "&lt;");
+            var html = "<h2>" + escaped + "</h2>";
+            if (tweets.length == 0) { html += "No tweets found"; }
+            else {
+                html += "<dl>"; // <dl> list of results
+                for(var i = 0; i < tweets.length; i++) {
+                    var tweet = tweets[i];
+                    var text = tweet.text;
+                    var from = tweet.from_user;
+                    var tweeturl = "http://twitter.com/#!/" + from + "/status/" + tweet.id_str; 
+                    html += "<dt><a target='_blank' href='" + tweeturl + "'>" + tweet. rom_user + "</a></dt><dd>" + tweet.text + "</dd>";
+                }
+                html += "</dl>";
+            }
+            // Вставить документ в <iframe>
+            document.body.innerHTML = html;
+        });
+    }
+    $(function() {
+        // Сообщить вмещающему документу, что модуль готов к поиску. Вмещающий документ
+        // не может отправлять модулю сообщения до получения этого сообщения, потому что
+        // модуль еще не готов принимать сообщения. Вмещающий документ может просто
+        // дождаться события onload, чтобы определить момент, кода будут загружены
+        // все фреймы. Но мы предусматриваем отправку этого сообщения, чтобы известить
+        // вмещающий документ, что можно начать выполнять поиск еще до получения
+        // события onload. Модулю неизвестно происхождение вмещающего документа, 
+        // поэтому мы используем *, чтобы броузер доставил сообщение любому документу.
+        window.parent.postMessage("Twitter Search v0.1", "*");
+    });
+    </script>
+</head>
+<body>
+</body>
+</html>

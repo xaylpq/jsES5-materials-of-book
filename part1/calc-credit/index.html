@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript кредитный калькулятор</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Это HTML-таблица с элементами <input>, позволяющими вводить данные, и с элементами <span>, в которых отображаются результаты вычислений. Эти элементы имеют идентификаторы, такие как "interest" и "years". Данные идентификаторы используются в JavaScript- коде, который следует за определением таблицы. Обратите внимание, что для некоторых элементов ввода определены обработчики событий "onchange" и "onclick". В них заданы строки JavaScript- кода, выполняемого при вводе данных или щелчке на кнопке. -->
+    <table>
+        <tr>
+            <th>Введите данные кредита:</th>
+            <td></td>
+            <th>Кредитный баланс, накопленный капитал и процентные платежи</th>
+        </tr>
+        <tr>
+            <td>Сумма:</td>
+            <td>
+                <input id="amount" onchange="calculate();">
+            </td>
+            <td rowspan=8>
+                <canvas id="graph" width="400" height="250"></canvas>
+            </td>
+        </tr>
+        <tr>
+            <td>Ставка (%):</td>
+            <td>
+                <input id="apr" onchange="calculate();">
+            </td>
+        </tr>
+        <tr>
+            <td>Период (лет):</td>
+            <td><input id="years" onchange="calculate();"></td>
+        <tr>
+            <td>Почтовый индекс (чтобы найти кредиторов):</td>
+            <td><input id="zipcode" onchange="calculate();"></td>
+        <tr>
+            <th>Приблизительные платежи:</th>
+            <td><button onclick="calculate();">Рассчитать</button></td>
+        </tr>
+        <tr>
+            <td>Месячный платеж:</td>
+            <td><span class="output" id="payment"></span></td>
+        </tr>
+        <tr>
+            <td>Общий платеж:</td>
+            <td><span class="output" id="total"></span></td>
+        </tr>
+        <tr>
+            <td>Переплата:</td>
+            <td><span class="output" id="totalinterest"></span></td>
+        </tr>
+        <tr>
+            <th>Спонсоры:</th>
+            <td colspan=2>Подать заявку на кредит с одним из этих мелких кредиторов:<div id="lenders"></div></td>
+        </tr>
+    </table>
+    <script src="main.js"></script>
+</body>
+</html>

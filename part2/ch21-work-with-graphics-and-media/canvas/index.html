@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    Это красный квадрат: <canvas id="square" width=10 height=10></canvas>.
+    Это голубой круг: <canvas id="circle" width=10 height=10></canvas>.
+    <script>
+        var canvas = document.getElementById("square"); // Найти первый элемент canvas
+        var context = canvas.getContext("2d"); // Получить 2-мерный контекст
+        context.fillStyle = "#f00"; // Цвет заливки - красный
+        context.fillRect(0,0,10,10); // Залить квадрат
+        canvas = document.getElementById("circle"); // Второй элемент canvas
+        context = canvas.getContext("2d"); // Получить его контекст
+        context.beginPath(); // Начать новый "контур"
+        context.arc(5, 5, 5, 0, 2*Math.PI, true); // Добавить круг
+        context.fillStyle = "#00f"; // Цвет заливки - синий
+        context.fill(); // Залить круг
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>

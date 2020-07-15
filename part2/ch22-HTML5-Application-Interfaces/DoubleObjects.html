@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Двоичные объекты</title>
+</head>
+<body>
+    <script>
+    // Выводит информацию о выбранных файлах
+    function fileinfo(files) {
+        for(var i = 0; i < files.length; i++) { // files - подобный массиву объект
+            var f = files[i];
+            console.log(f.name, // Только имя: без пути к файлу
+            f.size, f.type, // размер и тип - свойства Blob
+            f.lastModifiedDate); // еще одно свойство объекта File
+        }
+    }
+    </script>
+    <!-- Разрешить выбор нескольких файлов изображений и передать их fileinfo()-->
+    <input type="file" accept="image/*" multiple onchange="fileinfo(this.files)"/>
+</body>
+</html>

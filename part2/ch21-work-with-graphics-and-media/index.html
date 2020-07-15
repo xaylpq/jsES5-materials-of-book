@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Работа с графикой и медиафайлами на стороне клиента</title>
+</head>
+<body>
+    <img src="1.png" onmouseover="this.src='2.jpg'" onmouseout="this.src='1.png'">
+    Это красный квадрат: <svg width="10" height="10">
+        <rect x="0" y="0" width="10" height="10" fill="red"/>
+        </svg>
+    Это голубой круг: <svg width="10" height="10">
+            <circle cx="5" cy="5" r="5" fill="blue"/>
+        </svg>
+    <!-- Начало рисунка и объявление пространства имен -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"> <!-- Система координат рисунка -->
+        <defs> <!-- Настройка некоторых определений -->
+            <linearGradient id="fade"> <!-- Цветовой градиент с именем "fade" -->
+                <stop offset="0%" stop-color="#008"/> <!-- Начинаем с темно-синего -->
+                <stop offset="100%" stop-color="#ccf"/><!--Заканчиваем светло-синим -->
+            </linearGradient>
+        </defs> <!-- Нарисовать прямоугольник  с тонкой черной рамкой и заполнить его градиентом -->
+        <rect x="100" y="200" width="800" height="600" stroke="black" stroke-width="25" fill="url(#fade)"/>
+    </svg>
+    <script src="main.js"></script>
+    <script>
+        (new Image()).src = "2.jpg";
+        new Audio("chime.wav").play(); // Загрузить и проиграть звуковой эффект
+    </script> 
+    <!-- загружаем второе изображение в кэш -->
+</body>
+</html>
